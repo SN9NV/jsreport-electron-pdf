@@ -21,6 +21,16 @@ function parseBoolean(param, defaultValue) {
   return defaultValue;
 }
 
+function parseIfJSON(str) {
+  try {
+    var json = JSON.parse(str);
+  } catch(e) {
+    return str;
+  }
+  
+  return json;
+}
+
 export default function(conversion, request, response) {
   // TODO: add support for header and footer html when electron support printing header/footer
   return new Promises((resolve) => {
@@ -44,7 +54,7 @@ export default function(conversion, request, response) {
 
       pdf: {
         marginsType: numberOrUndefined(options.marginsType),
-        pageSize: options.format,
+        pageSize: parseIfJSON(options.format),
         printBackground: parseBoolean(options.printBackground, true),
         landscape: parseBoolean(options.landscape, false)
       }
